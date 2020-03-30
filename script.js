@@ -1,6 +1,3 @@
-// Saved cities
-var savedcitiesArr = [];
-
 // Once document is loaded
 $(document).ready(function () {
 
@@ -9,6 +6,9 @@ $(document).ready(function () {
 
     // console.log(currentDay);
 
+    // Saved cities
+    var savedcitiesArr = [];
+    
     // Get Previous data
     getPrevCities();
 
@@ -89,7 +89,7 @@ $(document).ready(function () {
 
     // City button
     $(".list-group-item").on("click", function (event) {
-        
+
         // City input
         city = $(this).text();
         console.log(city);
@@ -98,18 +98,18 @@ $(document).ready(function () {
         getCurrentData();
 
     });
-    
+
 
     function getCurrentData() {
 
         console.log("Get Data");
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=d953636a06fd6af8b2c881b86b574429";
-        
+
         $.ajax({
             url: queryURL,
             method: "GET"
         }).then(function (response) {
-            
+
             name = response.name;
             temperature = response.main.temp;
             iconImg = response.weather[0].icon;
@@ -211,14 +211,16 @@ $(document).ready(function () {
     // Get 5-day forcast
     function getFiveData() {
         console.log("Get Five Data");
-        var forcastFiveURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&mode=xml&APPID=d953636a06fd6af8b2c881b86b574429";
+        var forcastFiveURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&APPID=d953636a06fd6af8b2c881b86b574429";
         console.log(forcastFiveURL);
         // URL open weather + city query
         // Add city name to list
         $.ajax({
             url: forcastFiveURL,
-            method: "GET"
+            method: "GET",
+            dataType: "json"
         }).then(function (response) {
+            console.log("hello");
             console.log(response);
             // var fiveDayData = response.childNodes[0].childNodes[4].childNodes;
             // Day 1 - 12PM
