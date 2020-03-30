@@ -30,3 +30,14 @@ form {
     font-size: smaller;
 }
 
+.inline {
+    float: left;
+}
+
+.current-icon { 
+    float: right;
+}
+
+.data {
+    clear: both;
+}
