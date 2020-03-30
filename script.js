@@ -87,6 +87,19 @@ $(document).ready(function () {
         }
     }
 
+    // City button
+    $(".list-group-item").on("click", function (event) {
+        
+        // City input
+        city = $(this).text();
+        console.log(city);
+
+        // Get current data
+        getCurrentData();
+
+    });
+    
+
     function getCurrentData() {
 
         console.log("Get Data");
