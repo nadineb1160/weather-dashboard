@@ -28,14 +28,17 @@ $(document).ready(function () {
         // Push new city to saved array
         savedcitiesArr.push(city);
 
-        // Get data
-        getData();
+        // Get current data
+        getCurrentData();
 
         // Save data
 
+        // Get five day data
+        getFiveData();
+
     });
 
-    function getData() {
+    function getCurrentData() {
         console.log("Get Data");
         // var city = London, uk
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=d953636a06fd6af8b2c881b86b574429";
@@ -111,6 +114,43 @@ $(document).ready(function () {
 
 
     // Save city list to localStorage
+
+    var dayOneTemp, dayOneHum, dayOneIcon;
+
+    // Get 5-day forcast
+    function getFiveData() {
+        console.log("Get Five Data");
+        var forcastFiveURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&mode=xml&APPID=d953636a06fd6af8b2c881b86b574429";
+        console.log(forcastFiveURL);
+        // URL open weather + city query
+        // Add city name to list
+        $.ajax({
+            url: forcastFiveURL,
+            method: "GET"
+        }).then(function (response) {
+            console.log(response);
+            // var fiveDayData = response.childNodes[0].childNodes[4].childNodes;
+            // Day 1 - 12PM
+            // var dayOne = fiveDayData[4];
+            // console.log(dayOne);
+            // dayOneIcon = dayOne.childNodes;
+            // console.log(dayOneIcon);
+            // dayOneTemp = 
+
+
+            // Day 2 - 12PM
+            // console.log(fiveDayData[12]);
+            // Day 3 - 12PM
+            // console.log(fiveDayData[20]);
+            // Day 4 - 12PM
+            // console.log(fiveDayData[28]);
+            // Day 5 - 12PM
+            // console.log(fiveDayData[36]);
+        });
+    }
+
+
+
 });
 
 
