@@ -1,4 +1,5 @@
-
+// Saved cities
+var savedcitiesArr = [];
 
 // Once document is loaded
 $(document).ready(function () {
@@ -11,10 +12,9 @@ $(document).ready(function () {
     // Get Previous data
     getPrevCities();
 
-    // Saved cities
-    var savedcitiesArr = [];
-
+    // City value entered
     var city = "";
+    // Variables for data
     var name, temperature, wind, humidity, UVIndex, iconImg;
     // Latitude and longitude
     var lat, long;
@@ -32,6 +32,7 @@ $(document).ready(function () {
 
         // Push new city to saved array
         savedcitiesArr.push(city);
+        console.log(savedcitiesArr);
 
         // Get current data
         getCurrentData();
@@ -39,7 +40,8 @@ $(document).ready(function () {
         // Save data
         saveData();
 
-        displayCities();
+        // Display previous cities
+        displayHistory();
 
 
     });
@@ -55,16 +57,16 @@ $(document).ready(function () {
         if (storedCities) {
             // Set savedCitiesARr to stored
             savedcitiesArr = JSON.parse(storedCities);
-            console.log("saved" + savedcitiesArr);
+            console.log("saved " + savedcitiesArr);
         }
 
-        displayCities();
+        displayHistory();
     }
 
-    function displayCities() {
+    function displayHistory() {
 
         // City list
-        var cities = $(".city-history");
+        var cities = $(".list-group");
 
         // Clear old list before appending
         cities.text("");
@@ -79,6 +81,7 @@ $(document).ready(function () {
 
             // Create a new button
             var cityBtn = $("<button>");
+            cityBtn.addClass("list-group-item list-group-item-action");
             cityBtn.text(newCity);
             cities.prepend(cityBtn);
         }
