@@ -8,11 +8,16 @@ $(document).ready(function () {
 
     // console.log(currentDay);
 
+    // Get Previous data
+    getPrevCities();
+
     // Saved cities
     var savedcitiesArr = [];
 
     var city = "";
-    var name, temperature, wind, humdity, uvIndex, iconImg;
+    var name, temperature, wind, humidity, UVIndex, iconImg;
+    // Latitude and longitude
+    var lat, long;
 
     // Submit button
     $(".submit").on("click", function (event) {
@@ -32,44 +37,87 @@ $(document).ready(function () {
         getCurrentData();
 
         // Save data
+        saveData();
 
-        // Get five day data
-        getFiveData();
+        displayCities();
+
 
     });
 
+    function saveData() {
+        localStorage.setItem("savedCities", JSON.stringify(savedcitiesArr));
+    }
+
+    function getPrevCities() {
+        var storedCities = localStorage.getItem("savedCities");
+
+        // If not not null
+        if (storedCities) {
+            // Set savedCitiesARr to stored
+            savedcitiesArr = JSON.parse(storedCities);
+            console.log("saved" + savedcitiesArr);
+        }
+
+        displayCities();
+    }
+
+    function displayCities() {
+
+        // City list
+        var cities = $(".city-history");
+
+        // Clear old list before appending
+        cities.text("");
+
+        // Loop through saved cities to display
+        for (var i = 0; i < savedcitiesArr.length; i++) {
+
+            console.log("display cities");
+
+            // New text used for setting city
+            var newCity = savedcitiesArr[i];
+
+            // Create a new button
+            var cityBtn = $("<button>");
+            cityBtn.text(newCity);
+            cities.prepend(cityBtn);
+        }
+    }
+
     function getCurrentData() {
+
         console.log("Get Data");
-        // var city = London, uk
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=d953636a06fd6af8b2c881b86b574429";
-        // console.log(queryURL);
-        // URL open weather + city query
-        // Add city name to list
+        
         $.ajax({
             url: queryURL,
             method: "GET"
         }).then(function (response) {
-            console.log(response);
+            
             name = response.name;
             temperature = response.main.temp;
             iconImg = response.weather[0].icon;
-            // console.log("Icon " + iconImg);
-            humdity = response.main.humidity;
+            humidity = response.main.humidity;
             wind = response.wind.speed;
+            lat = response.coord.lat;
+            long = response.coord.lon;
 
-            // Display new city
-            displayCity();
+            // Get UV index
+            getUVIndex();
+
+            // // Display new city
+            // displayCity();
 
             // Display 5-day forcast
-            displayFiveDay();
+            // displayFiveDay();
 
         })
     }
 
 
     // Display the current day dashboard of city
-    function displayCity() {
-        console.log("Display city");
+    function displayCurrentDay() {
+        console.log("Display Current Day");
         console.log(city);
         // Display today's forcast
         // Name
@@ -78,23 +126,50 @@ $(document).ready(function () {
         $(".current-date").text(currentDay);
         // Icon
         var iconURL = "http://openweathermap.org/img/wn/" + iconImg + "@2x.png";
-        console.log(iconImg);
-        console.log(iconURL);
+        // console.log(iconImg);
+        // console.log(iconURL);
         $(".current-icon").attr("src", iconURL);
         // Temperature
         $(".temperature").text(temperature);
         // Wind speed
         $(".wind").text(wind);
+        // Humidity 
+        $(".humidity").text(humidity);
+        console.log(humidity);
         // UV index
-        $(".uv").text("UV");
+        console.log("UV" + UVIndex);
+        $(".uv").text(UVIndex);
 
         // Display UV color
         displayUV();
     }
 
+    // Get UV data
+    function getUVIndex() {
+        console.log("Get UV Data");
+        var queryUVURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + long + "&APPID=d953636a06fd6af8b2c881b86b574429";
+        // console.log(queryUVURL);
+        $.ajax({
+            url: queryUVURL,
+            method: "GET"
+        }).then(function (response) {
+            // console.log(response);
+            UVIndex = response.value;
+            // console.log("index " + UVIndex);
+
+            // Display new city
+            displayCurrentDay();
+
+        });
+    }
+
+
     // Display UV color 
     function displayUV() {
         console.log("UV");
+
+        // Get five day data
+        getFiveData();
     }
 
 
