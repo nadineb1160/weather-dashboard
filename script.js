@@ -4,31 +4,30 @@ $(document).ready(function () {
     // Current date formatted 
     let currentDay = moment().format("MMMM Do YYYY");
 
-    // console.log(currentDay);
-
     // Saved cities
     var savedcitiesArr = [];
-    
+
     // Get Previous data
     getPrevCities();
 
     // City value entered
     var city = "";
+
     // Variables for data
     var name, temperature, wind, humidity, UVIndex, iconImg;
+
     // Latitude and longitude
     var lat, long;
 
     // Submit button
     $(".submit").on("click", function (event) {
-        // Prevent default form behavior
+
         event.preventDefault();
 
         // Possibly auto fill api?
 
         // City input
         city = $("#city").val();
-        // console.log(city);
 
         // Push new city to saved array
         savedcitiesArr.push(city);
@@ -41,15 +40,17 @@ $(document).ready(function () {
         saveData();
 
         // Display previous cities
-        displayHistory();
+        displayPrevCities();
 
 
     });
 
+    // Set data in local storage
     function saveData() {
         localStorage.setItem("savedCities", JSON.stringify(savedcitiesArr));
     }
 
+    // Get previous cities
     function getPrevCities() {
         var storedCities = localStorage.getItem("savedCities");
 
@@ -57,13 +58,14 @@ $(document).ready(function () {
         if (storedCities) {
             // Set savedCitiesARr to stored
             savedcitiesArr = JSON.parse(storedCities);
-            console.log("saved " + savedcitiesArr);
+            // console.log("saved " + savedcitiesArr);
         }
 
-        displayHistory();
+        displayPrevCities();
     }
 
-    function displayHistory() {
+    // Display previous cities
+    function displayPrevCities() {
 
         // City list
         var cities = $(".list-group");
@@ -74,7 +76,7 @@ $(document).ready(function () {
         // Loop through saved cities to display
         for (var i = 0; i < savedcitiesArr.length; i++) {
 
-            console.log("display cities");
+            // console.log("display cities");
 
             // New text used for setting city
             var newCity = savedcitiesArr[i];
@@ -83,6 +85,7 @@ $(document).ready(function () {
             var cityBtn = $("<button>");
             cityBtn.addClass("list-group-item list-group-item-action");
             cityBtn.text(newCity);
+            // Prepend to cities list 
             cities.prepend(cityBtn);
         }
     }
@@ -92,7 +95,7 @@ $(document).ready(function () {
 
         // City input
         city = $(this).text();
-        console.log(city);
+        // console.log(city);
 
         // Get current data
         getCurrentData();
@@ -102,7 +105,7 @@ $(document).ready(function () {
 
     function getCurrentData() {
 
-        console.log("Get Data");
+        // console.log("Get Data");
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=d953636a06fd6af8b2c881b86b574429";
 
         $.ajax({
@@ -133,36 +136,39 @@ $(document).ready(function () {
 
     // Display the current day dashboard of city
     function displayCurrentDay() {
-        console.log("Display Current Day");
-        console.log(city);
+        // console.log("Display Current Day");
+        // console.log(city);
         // Display today's forcast
+
         // Name
         $(".city-name").text(name);
+
         // Date
         $(".current-date").text(currentDay);
+
         // Icon
         var iconURL = "http://openweathermap.org/img/wn/" + iconImg + "@2x.png";
-        // console.log(iconImg);
-        // console.log(iconURL);
         $(".current-icon").attr("src", iconURL);
+
         // Temperature
         $(".temperature").text(temperature);
+
         // Wind speed
         $(".wind").text(wind);
+
         // Humidity 
         $(".humidity").text(humidity);
-        console.log(humidity);
+
         // UV index
-        console.log("UV" + UVIndex);
         $(".uv").text(UVIndex);
 
-        // Display UV color
+        // UV color
         displayUV();
     }
 
     // Get UV data
     function getUVIndex() {
-        console.log("Get UV Data");
+        // console.log("Get UV Data");
         var queryUVURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + long + "&APPID=d953636a06fd6af8b2c881b86b574429";
         // console.log(queryUVURL);
         $.ajax({
@@ -182,7 +188,7 @@ $(document).ready(function () {
 
     // Display UV color 
     function displayUV() {
-        console.log("UV");
+        // console.log("UV");
 
         // Get five day data
         getFiveData();
@@ -207,12 +213,13 @@ $(document).ready(function () {
     // Save city list to localStorage
 
     var dayOneTemp, dayOneHum, dayOneIcon;
+    var fiveDayData15 = [];
 
     // Get 5-day forcast
     function getFiveData() {
-        console.log("Get Five Data");
+        // console.log("Get Five Data");
         var forcastFiveURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&APPID=d953636a06fd6af8b2c881b86b574429";
-        console.log(forcastFiveURL);
+        // console.log(forcastFiveURL);
         // URL open weather + city query
         // Add city name to list
         $.ajax({
@@ -220,9 +227,25 @@ $(document).ready(function () {
             method: "GET",
             dataType: "json"
         }).then(function (response) {
-            console.log("hello");
-            console.log(response);
-            // var fiveDayData = response.childNodes[0].childNodes[4].childNodes;
+            // console.log(response);
+            var fiveDayData = response.list;
+            // console.log(fiveDayData);
+
+            // Get 5-day forcast at 15:00:00
+            for (var i = 0; i < fiveDayData.length; i++) {
+                var hour = fiveDayData[i].dt_txt.split(" ")[1];
+                // console.log(fiveDayData);
+                if (hour === "15:00:00") {
+                    var dayData = {};
+                    dayData["temp"] = fiveDayData[i].main.temp;
+                    dayData["humidity"] = fiveDayData[i].main.humidity;
+                    fiveDayData15.push(dayData);
+                    // console.log(fiveDayData[i]);
+                }
+            }
+
+            console.log(fiveDayData15);
+            // console.log(fiveDayData15);
             // Day 1 - 12PM
             // var dayOne = fiveDayData[4];
             // console.log(dayOne);
