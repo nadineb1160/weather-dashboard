@@ -19,6 +19,9 @@ $(document).ready(function () {
     // Latitude and longitude
     var lat, long;
 
+    // Array of five day objs at 3pm
+    var fiveDayData15 = [];
+
     // Submit button
     $(".submit").on("click", function (event) {
 
@@ -91,7 +94,7 @@ $(document).ready(function () {
     }
 
     // City button
-    $(".list-group-item").on("click", function (event) {
+    $(document).on("click", ".list-group-item", function (event) {
 
         // City input
         city = $(this).text();
@@ -198,10 +201,32 @@ $(document).ready(function () {
     // Display 5-day forcast
     function displayFiveDay() {
 
-        // Date
-        // Icon
-        // Temperature
-        // Humidity
+        //For each of the five days at 3pm
+        for (var i = 0; i < fiveDayData15.length; i++) {
+
+            var index = "#" + i;
+            var card = $(index)
+            card.empty();
+
+            var cardBody = $("<div>");
+            cardBody.addClass("card-body");
+
+            var date = $("<h6>").addClass("card-title date").text(fiveDayData15[i].date);
+
+
+            var iconURL = "http://openweathermap.org/img/wn/" + fiveDayData15[i].icon + "@2x.png";
+            var icon = $("<i>").addClass("temp-icon").attr("src", iconURL);
+
+            var temp = $("<p>").addClass("card-text temp").text("Temperature: " + fiveDayData15[i].temperature);
+
+            var humidity = $("<p>").addClass("card-text hum").text("Humidity: " + fiveDayData15[i].humidity);
+            
+            cardBody.append(date, icon, temp, humidity)
+
+            card.append(cardBody);
+            
+        }
+
     }
 
     // Click on city buttons
@@ -211,9 +236,6 @@ $(document).ready(function () {
 
 
     // Save city list to localStorage
-
-    var dayOneTemp, dayOneHum, dayOneIcon;
-    var fiveDayData15 = [];
 
     // Get 5-day forcast
     function getFiveData() {
@@ -230,38 +252,28 @@ $(document).ready(function () {
             // console.log(response);
             var fiveDayData = response.list;
             // console.log(fiveDayData);
+            fiveDayData15 = [];
 
             // Get 5-day forcast at 15:00:00
             for (var i = 0; i < fiveDayData.length; i++) {
-                var hour = fiveDayData[i].dt_txt.split(" ")[1];
-                // console.log(fiveDayData);
+                var dateAndHour = fiveDayData[i].dt_txt.split(" ")
+                var date = dateAndHour[0];
+                var hour = dateAndHour[1];
+                var dayCurrent = fiveDayData[i];
                 if (hour === "15:00:00") {
                     var dayData = {};
-                    dayData["temp"] = fiveDayData[i].main.temp;
-                    dayData["humidity"] = fiveDayData[i].main.humidity;
+                    dayData["date"] = date;
+                    dayData["time"] = hour;
+                    dayData["icon"] = dayCurrent.weather[0].icon;
+                    dayData["temperature"] = dayCurrent.main.temp;
+                    dayData["humidity"] = dayCurrent.main.humidity;
                     fiveDayData15.push(dayData);
                     // console.log(fiveDayData[i]);
                 }
             }
 
             console.log(fiveDayData15);
-            // console.log(fiveDayData15);
-            // Day 1 - 12PM
-            // var dayOne = fiveDayData[4];
-            // console.log(dayOne);
-            // dayOneIcon = dayOne.childNodes;
-            // console.log(dayOneIcon);
-            // dayOneTemp = 
-
-
-            // Day 2 - 12PM
-            // console.log(fiveDayData[12]);
-            // Day 3 - 12PM
-            // console.log(fiveDayData[20]);
-            // Day 4 - 12PM
-            // console.log(fiveDayData[28]);
-            // Day 5 - 12PM
-            // console.log(fiveDayData[36]);
+            displayFiveDay();
         });
     }
 
