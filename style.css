@@ -1,47 +1,55 @@
+/* Jumbotron */
 .jumbotron {
     background-color: black;
     text-align: center;
     color: palevioletred;
 }
 
+/* Cities column */
 .cities {
     float: left;
-    background-color: lightgray;
+    background-color: palevioletred;
     margin-bottom: 20px;
     /* padding-left: 0; */
 
 }
 
+/* City history section */
 .city-history {
     margin-bottom: 20px;
 }
 
+/* City buttons */
 .list-group-item {
     background-color: lightpink;
 }
 
+/* Search form */
 form {
     padding: 10px;
 }
 
-
-
+/* Current city data */
 .city-current {
     border: solid 2px black;
+    border-radius: 5px;
     margin-bottom: 20px;
     padding: 15px;
 }
 
+/* Five day data card */
 .card {
     background-color: lightpink;
     color: black;
     font-size: smaller;
 }
 
+/* Class - name and date */
 .inline {
     float: left;
 }
 
+/* Current data icon */
 .current-icon { 
     float: right;
     background-color: lightpink;
@@ -49,19 +57,23 @@ form {
     border-radius: 5px;
 }
 
+/* Current data */
 .data {
     clear: both;
 }
 
+/* temperature icon for 5-day data */
 .temp-icon {
     padding: 8px;
 }
 
+/* Search button */
 .submit {
     background-color: white;
     color: palevioletred;
 }
 
+/* Elements in data class */
 .d {
     font-size: larger;
     color: palevioletred;
