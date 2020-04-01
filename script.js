@@ -215,8 +215,8 @@ $(document).ready(function () {
             var cardDate = $("<h6>").addClass("card-title date").text(fiveDayData15[i].date);
 
 
-            var iconURL = "http://openweathermap.org/img/wn/" + fiveDayData15[i].icon + "@2x.png";
-            var cardIcon = $("<i>").addClass("temp-icon").attr("src", iconURL);
+            var iconURL = "http://openweathermap.org/img/wn/" + fiveDayData15[i].icon + ".png";
+            var cardIcon = $("<img>").addClass("temp-icon").attr("src", iconURL);
 
             var cardTemp = $("<p>").addClass("card-text temp").text("Temp: " + fiveDayData15[i].temperature);
 
