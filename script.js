@@ -27,14 +27,15 @@ $(document).ready(function () {
 
         event.preventDefault();
 
-        // Possibly auto fill api?
-
         // City input
         city = $("#city").val();
 
-        // Push new city to saved array
-        savedcitiesArr.push(city);
-        console.log(savedcitiesArr);
+        // If not empty
+        if (city !== "") {
+            // Push new city to saved array
+            savedcitiesArr.push(city);
+            console.log(savedcitiesArr);
+        }
 
         // Get current data
         getCurrentData();
@@ -221,11 +222,11 @@ $(document).ready(function () {
             var cardTemp = $("<p>").addClass("card-text temp").text("Temp: " + fiveDayData15[i].temperature);
 
             var cardHumidity = $("<p>").addClass("card-text hum").text("Humidity: " + fiveDayData15[i].humidity);
-            
+
             cardBody.append(cardDate, cardIcon, cardTemp, cardHumidity)
 
             card.append(cardBody);
-            
+
         }
 
     }
@@ -280,7 +281,7 @@ $(document).ready(function () {
 
     // function converts kelvin to farenheit
     function kelvinToFarenheit(degreeK) {
-        var degreeF = (degreeK * (9/5)) - 459.67;
+        var degreeF = (degreeK * (9 / 5)) - 459.67;
         return Math.trunc(degreeF);
     }
 
