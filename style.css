@@ -16,6 +16,10 @@
     margin-bottom: 20px;
 }
 
+.list-group-item {
+    background-color: lightpink;
+}
+
 form {
     padding: 10px;
 }
@@ -51,4 +55,9 @@ form {
 
 .temp-icon {
     padding: 8px;
+}
+
+.submit {
+    background-color: white;
+    color: palevioletred;
 }
