@@ -34,7 +34,6 @@ $(document).ready(function () {
         if (city !== "") {
             // Push new city to saved array
             savedcitiesArr.push(city);
-            console.log(savedcitiesArr);
         }
 
         // Get current data
@@ -62,7 +61,6 @@ $(document).ready(function () {
         if (storedCities) {
             // Set savedCitiesARr to stored
             savedcitiesArr = JSON.parse(storedCities);
-            // console.log("saved " + savedcitiesArr);
         }
 
         displayPrevCities();
@@ -80,8 +78,6 @@ $(document).ready(function () {
         // Loop through saved cities to display
         for (var i = 0; i < savedcitiesArr.length; i++) {
 
-            // console.log("display cities");
-
             // New text used for setting city
             var newCity = savedcitiesArr[i];
 
@@ -89,6 +85,7 @@ $(document).ready(function () {
             var cityBtn = $("<button>");
             cityBtn.addClass("list-group-item list-group-item-action");
             cityBtn.text(newCity);
+
             // Prepend to cities list 
             cities.prepend(cityBtn);
         }
@@ -99,7 +96,6 @@ $(document).ready(function () {
 
         // City input
         city = $(this).text();
-        // console.log(city);
 
         // Get current data
         getCurrentData();
@@ -109,7 +105,6 @@ $(document).ready(function () {
 
     function getCurrentData() {
 
-        // console.log("Get Data");
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=d953636a06fd6af8b2c881b86b574429";
 
         $.ajax({
@@ -117,6 +112,7 @@ $(document).ready(function () {
             method: "GET"
         }).then(function (response) {
 
+            // Get data for today's weather
             name = response.name;
             temperature = response.main.temp;
             iconImg = response.weather[0].icon;
@@ -128,21 +124,12 @@ $(document).ready(function () {
             // Get UV index
             getUVIndex();
 
-            // // Display new city
-            // displayCity();
-
-            // Display 5-day forcast
-            // displayFiveDay();
-
         })
     }
 
 
     // Display the current day dashboard of city
     function displayCurrentDay() {
-        // console.log("Display Current Day");
-        // console.log(city);
-        // Display today's forcast
 
         // Name
         $(".city-name").text(name);
@@ -165,26 +152,25 @@ $(document).ready(function () {
         $(".humidity").text(humidity);
 
         // UV index
-        $(".uv").text(UVIndex);
+        $(".uv-index").text(UVIndex);
 
         // UV color
-        displayUV();
+        displayUV(UVIndex);
     }
 
     // Get UV data
     function getUVIndex() {
-        // console.log("Get UV Data");
+
         var queryUVURL = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon=" + long + "&APPID=d953636a06fd6af8b2c881b86b574429";
-        // console.log(queryUVURL);
+
         $.ajax({
             url: queryUVURL,
             method: "GET"
         }).then(function (response) {
-            // console.log(response);
+            // Retrieve UV index
             UVIndex = response.value;
-            // console.log("index " + UVIndex);
 
-            // Display new city
+            // Display city
             displayCurrentDay();
 
         });
@@ -192,8 +178,47 @@ $(document).ready(function () {
 
 
     // Display UV color 
-    function displayUV() {
-        // console.log("UV");
+    function displayUV(UVIndex) {
+
+        var uv = $(".uv-index")
+
+        var color = "";
+
+        if (UVIndex < 11) {
+
+            if (UVIndex < 8) {
+
+                if (UVIndex < 6) {
+                    if (UVIndex < 3) {
+                        // 0 to 2 -> Green
+                        color = "green";
+                    }
+                    else {
+                        // 3 to 5 -> Yellow
+                        color = "yellow";
+                        
+                    }
+                }
+                else {
+                    // 6 to 7 -> Orange
+                    color = "orange";
+                }
+            }
+            else {
+                // 8 to 10 -> Red
+                color = "red";
+            }
+
+        }
+        else {
+            // 11+ -> Violet
+            color = "purple";
+        }
+
+        // Set background color 
+        var colorStr = "background-color: " + color
+        uv.attr("style", colorStr);
+        console.log(color);
 
         // Get five day data
         getFiveData();
