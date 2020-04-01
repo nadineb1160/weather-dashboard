@@ -2,7 +2,7 @@
 $(document).ready(function () {
 
     // Current date formatted 
-    let currentDay = moment().format("MMMM Do YYYY");
+    let currentDay = moment().format("(MM/DD/YYYY)");
 
     // Saved cities
     var savedcitiesArr = [];
@@ -154,6 +154,7 @@ $(document).ready(function () {
         $(".current-icon").attr("src", iconURL);
 
         // Temperature
+        temperature = kelvinToFarenheit(temperature)
         $(".temperature").text(temperature);
 
         // Wind speed
@@ -211,17 +212,17 @@ $(document).ready(function () {
             var cardBody = $("<div>");
             cardBody.addClass("card-body");
 
-            var date = $("<h6>").addClass("card-title date").text(fiveDayData15[i].date);
+            var cardDate = $("<h6>").addClass("card-title date").text(fiveDayData15[i].date);
 
 
             var iconURL = "http://openweathermap.org/img/wn/" + fiveDayData15[i].icon + "@2x.png";
-            var icon = $("<i>").addClass("temp-icon").attr("src", iconURL);
+            var cardIcon = $("<i>").addClass("temp-icon").attr("src", iconURL);
 
-            var temp = $("<p>").addClass("card-text temp").text("Temperature: " + fiveDayData15[i].temperature);
+            var cardTemp = $("<p>").addClass("card-text temp").text("Temp: " + fiveDayData15[i].temperature);
 
-            var humidity = $("<p>").addClass("card-text hum").text("Humidity: " + fiveDayData15[i].humidity);
+            var cardHumidity = $("<p>").addClass("card-text hum").text("Humidity: " + fiveDayData15[i].humidity);
             
-            cardBody.append(date, icon, temp, humidity)
+            cardBody.append(cardDate, cardIcon, cardTemp, cardHumidity)
 
             card.append(cardBody);
             
@@ -257,7 +258,7 @@ $(document).ready(function () {
             // Get 5-day forcast at 15:00:00
             for (var i = 0; i < fiveDayData.length; i++) {
                 var dateAndHour = fiveDayData[i].dt_txt.split(" ")
-                var date = dateAndHour[0];
+                var date = formatDate(dateAndHour[0]);
                 var hour = dateAndHour[1];
                 var dayCurrent = fiveDayData[i];
                 if (hour === "15:00:00") {
@@ -265,7 +266,7 @@ $(document).ready(function () {
                     dayData["date"] = date;
                     dayData["time"] = hour;
                     dayData["icon"] = dayCurrent.weather[0].icon;
-                    dayData["temperature"] = dayCurrent.main.temp;
+                    dayData["temperature"] = kelvinToFarenheit(dayCurrent.main.temp);
                     dayData["humidity"] = dayCurrent.main.humidity;
                     fiveDayData15.push(dayData);
                     // console.log(fiveDayData[i]);
@@ -277,6 +278,27 @@ $(document).ready(function () {
         });
     }
 
+    // function converts kelvin to farenheit
+    function kelvinToFarenheit(degreeK) {
+        var degreeF = (degreeK * (9/5)) - 459.67;
+        return Math.trunc(degreeF);
+    }
+
+    // Format date (dateUnformatted - 2020-04-01)
+    function formatDate(dateUnformatted) {
+
+        // Format ["2020", "04", "01"]
+        dateSplit = dateUnformatted.split("-");
+
+        var year = dateSplit[0];
+        var month = dateSplit[1];
+        var day = dateSplit[2];
+
+        // Format (04/01/2020)
+        var dateFormatted = "(" + month + "/" + day + "/" + year + ")";
+
+        return dateFormatted;
+    }
 
 
 });
