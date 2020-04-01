@@ -40,11 +40,15 @@ form {
 
 .current-icon { 
     float: right;
-    background-color: lightgray;
+    background-color: lightpink;
     border:  5px solid lightpink;
     border-radius: 5px;
 }
 
 .data {
     clear: both;
+}
+
+.temp-icon {
+    padding: 8px;
 }
