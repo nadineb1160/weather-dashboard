@@ -1,6 +1,6 @@
 # Weather Dashboard
 
-This is a weather dashboard the will run in the browser and feature dynamically updated HTML and CSS. The weather data will be retrieved from a Third-party API.
+This is a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS. The weather data will be retrieved from a Third-party API.
 
 ## User Story
 
@@ -28,5 +28,52 @@ THEN I am again presented with current and future conditions for that city
 
 The following image demonstrates the application functionality:
 
-![weather dashboard demo](./06-server-side-apis-homework-demo.png)
+![weather dashboard demo](./06-demo.png)
 
+#
+Example of AJAX call to third party API
+```
+function getCurrentData() {
+
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=d953636a06fd6af8b2c881b86b574429";
+
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function (response) {
+
+        // Get data for today's weather
+        name = response.name;
+        temperature = response.main.temp;
+        iconImg = response.weather[0].icon;
+        humidity = response.main.humidity;
+        wind = response.wind.speed;
+        lat = response.coord.lat;
+        long = response.coord.lon;
+
+        // Get UV index
+        getUVIndex();
+
+    })
+}
+```
+
+
+## Technologies Used
+- HTML - used to create elements on the DOM
+- CSS - styles html elements on page
+- Javascript - to create functionality of quiz
+- jQuery - simplified DOM manipulation
+- JSON - data formatting
+- Moment.js - library to work with date and time
+- AJAX - to make calls to third party APIs
+- Git - version control system to track changes to source code
+- GitHub - hosts repository that can be deployed to GitHub Pages
+
+### Author links
+[LinkedIn](https://www.linkedin.com/in/nadine-bundschuh-731233b9)
+|
+[GitHub](https://github.com/nadineb1160)
+
+### Author Names
+- Nadine Bundschuh
