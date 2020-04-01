@@ -30,8 +30,11 @@ $(document).ready(function () {
         // City input
         city = $("#city").val();
 
+        // Use UpperCase to store so it's all equal
+        city = city.toUpperCase();
+
         // If not empty
-        if (city !== "") {
+        if (city !== "" && savedcitiesArr.indexOf(city) === -1) {
             // Push new city to saved array
             savedcitiesArr.push(city);
         }
@@ -139,6 +142,7 @@ $(document).ready(function () {
 
         // Icon
         var iconURL = "http://openweathermap.org/img/wn/" + iconImg + "@2x.png";
+        $(".current-icon").attr("style", "display: block");
         $(".current-icon").attr("src", iconURL);
 
         // Temperature
