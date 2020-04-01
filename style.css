@@ -10,7 +10,7 @@
     float: left;
     background-color: palevioletred;
     margin-bottom: 20px;
-    /* padding-left: 0; */
+    border-radius: 5px;
 
 }
 
@@ -22,11 +22,6 @@
 /* City buttons */
 .list-group-item {
     background-color: lightpink;
-}
-
-/* Search form */
-form {
-    padding: 10px;
 }
 
 /* Current city data */
@@ -55,6 +50,7 @@ form {
     background-color: lightpink;
     border:  5px solid lightpink;
     border-radius: 5px;
+    display: none;
 }
 
 /* Current data */
