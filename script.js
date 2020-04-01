@@ -196,7 +196,6 @@ $(document).ready(function () {
                     else {
                         // 3 to 5 -> Yellow
                         color = "yellow";
-                        
                     }
                 }
                 else {
@@ -231,82 +230,92 @@ $(document).ready(function () {
         //For each of the five days at 3pm
         for (var i = 0; i < fiveDayData15.length; i++) {
 
+            // Index string #i
             var index = "#" + i;
             var card = $(index)
+
+            // Empty card
             card.empty();
 
+            // Create dard body div
             var cardBody = $("<div>");
             cardBody.addClass("card-body");
 
+            // Card date
             var cardDate = $("<h6>").addClass("card-title date").text(fiveDayData15[i].date);
 
-
+            // Card icon
             var iconURL = "http://openweathermap.org/img/wn/" + fiveDayData15[i].icon + ".png";
             var cardIcon = $("<img>").addClass("temp-icon").attr("src", iconURL);
 
+            // Card temperature
             var cardTemp = $("<p>").addClass("card-text temp").text("Temp: " + fiveDayData15[i].temperature);
 
+            // card humidity
             var cardHumidity = $("<p>").addClass("card-text hum").text("Humidity: " + fiveDayData15[i].humidity);
 
+            // Append new elements to card body
             cardBody.append(cardDate, cardIcon, cardTemp, cardHumidity)
 
+            // Append card body to card
             card.append(cardBody);
 
         }
 
     }
 
-    // Click on city buttons
-    // $(document).on("click", ".city-btn", function() {
-
-    // })
-
-
-    // Save city list to localStorage
-
     // Get 5-day forcast
     function getFiveData() {
-        // console.log("Get Five Data");
+
         var forcastFiveURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&APPID=d953636a06fd6af8b2c881b86b574429";
-        // console.log(forcastFiveURL);
-        // URL open weather + city query
-        // Add city name to list
+
         $.ajax({
             url: forcastFiveURL,
             method: "GET",
             dataType: "json"
         }).then(function (response) {
-            // console.log(response);
+
+            // Five Day data - all hours
             var fiveDayData = response.list;
-            // console.log(fiveDayData);
+
+            // Five Day data - 15:00:00
             fiveDayData15 = [];
 
             // Get 5-day forcast at 15:00:00
             for (var i = 0; i < fiveDayData.length; i++) {
+                // Date and Hour
                 var dateAndHour = fiveDayData[i].dt_txt.split(" ")
                 var date = formatDate(dateAndHour[0]);
                 var hour = dateAndHour[1];
+                // Current day within loop
                 var dayCurrent = fiveDayData[i];
+
+                // If hour is 15:00 or 3pm
                 if (hour === "15:00:00") {
+                    // Create new object
                     var dayData = {};
+                    // Add forcast data
                     dayData["date"] = date;
                     dayData["time"] = hour;
                     dayData["icon"] = dayCurrent.weather[0].icon;
                     dayData["temperature"] = kelvinToFarenheit(dayCurrent.main.temp);
                     dayData["humidity"] = dayCurrent.main.humidity;
+
+                    // Push day data to the array of 15:00 data
                     fiveDayData15.push(dayData);
-                    // console.log(fiveDayData[i]);
                 }
             }
 
-            console.log(fiveDayData15);
             displayFiveDay();
         });
     }
 
     // function converts kelvin to farenheit
     function kelvinToFarenheit(degreeK) {
+
+        // Degree in farenheit
         var degreeF = (degreeK * (9 / 5)) - 459.67;
+        // Truncate to integer
         return Math.trunc(degreeF);
     }
 
@@ -321,7 +330,7 @@ $(document).ready(function () {
         var day = dateSplit[2];
 
         // Format (04/01/2020)
-        var dateFormatted = "(" + month + "/" + day + "/" + year + ")";
+        var dateFormatted = month + "/" + day + "/" + year;
 
         return dateFormatted;
     }
