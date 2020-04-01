@@ -12,6 +12,10 @@
 
 }
 
+.city-history {
+    margin-bottom: 20px;
+}
+
 form {
     padding: 10px;
 }
@@ -25,8 +29,8 @@ form {
 }
 
 .card {
-    background-color: blue;
-    color: white;
+    background-color: lightpink;
+    color: black;
     font-size: smaller;
 }
 
@@ -36,6 +40,9 @@ form {
 
 .current-icon { 
     float: right;
+    background-color: lightgray;
+    border:  5px solid lightpink;
+    border-radius: 5px;
 }
 
 .data {
